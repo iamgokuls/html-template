@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sign Up</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- LINEARICONS -->
+		<link rel="stylesheet" href="fonts/linearicons/style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css">
+
+		
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body>
+		<div class="wrapper">
+			<div class="inner" style="margin: 10vh 0 10vh 0">
+				
+				<form action="">
+					<h3>Sign Up</h3>
+					<div class="form-holder">
+						<span class="lnr lnr-user"></span>
+						<input type="text" id="name" class="form-control" placeholder="Name" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-license"></span>
+						<input type="text" id="regno" class="form-control" placeholder="Register Number" required>
+					</div>
+					
+					<div class="form-holder">
+						<span class="lnr lnr-envelope"></span>
+						<input type="email" id="mail" class="form-control" placeholder="Mail" required>
+					</div>
+					<div class="form-holder">
+						<span class="lnr lnr-lock"></span>
+						<input type="password" id="password" class="form-control" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password" required>
+					</div>
+					<ul id="message" style="padding-left: 4vh">
+						<li id="length" class="invalid">Minimum length of 8 characters</li>
+						<li id="number" class="invalid">Atleast one number</li>
+						<li id="letter" class="invalid">Atleast one lowercase letter</li>
+						<li id="capital" class="invalid">Atleast one uppercase letter</li>
+						<!--<li id="number" class="invalid">Atleast one special character</li>-->
+					</ul>
+					<div class="form-holder">
+						<span class="lnr lnr-lock"></span>
+						<input type="password" id="confirmpassword" class="form-control" onKeyup="checkPassword();" placeholder="Confirm Password" required>
+					</div>
+					&nbsp;<span id='Confirm'></span>
+					
+					<button id="btn1" class="disabled" onclick="signup();" onmouseover="checkfield();">
+						<span>Sign Up</span>
+					</button>
+				</form>
+			</div>
+			
+		</div>
+
+
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script>
+			var myInput = document.getElementById("password");
+			var letter = document.getElementById("letter");
+			var capital = document.getElementById("capital");
+			var number = document.getElementById("number");
+			var length = document.getElementById("length"); 
+
+			
+
+			
+			// When the user clicks on the password field, show the message box
+			myInput.onfocus = function() {
+			//document.getElementById("message").style.display = "block";
+			$('#message').slideDown(500);
+			}
+
+			// When the user clicks outside of the password field, hide the message box
+			myInput.onblur = function() {
+			//document.getElementById("message").style.display = "none";
+			$('#message').slideUp(500)
+			}
+			// When the user starts to type something inside the password field
+			myInput.onkeyup = function() {
+			// Validate lowercase letters
+			var lowerCaseLetters = /[a-z]/g;
+			if(myInput.value.match(lowerCaseLetters)) { 
+				letter.classList.remove("invalid");
+				letter.classList.add("valid");
+			} else {
+				letter.classList.remove("valid");
+				letter.classList.add("invalid");
+			}
+
+			// Validate capital letters
+			var upperCaseLetters = /[A-Z]/g;
+			if(myInput.value.match(upperCaseLetters)) { 
+				capital.classList.remove("invalid");
+				capital.classList.add("valid");
+			} else {
+				capital.classList.remove("valid");
+				capital.classList.add("invalid");
+			}
+
+			// Validate numbers
+			var numbers = /[0-9]/g;
+			if(myInput.value.match(numbers)) { 
+				number.classList.remove("invalid");
+				number.classList.add("valid");
+			} else {
+				number.classList.remove("valid");
+				number.classList.add("invalid");
+			}
+
+			// Validate length
+			if(myInput.value.length >= 8) {
+				length.classList.remove("invalid");
+				length.classList.add("valid");
+			} else {
+				length.classList.remove("valid");
+				length.classList.add("invalid");
+			}
+			}
+
+			function checkPassword()
+			{
+				var confirmpassword = document.getElementById("confirmpassword").value;
+				var password = document.getElementById("password").value;
+				if(password == confirmpassword)
+				{
+					document.getElementById('Confirm').style.color = 'green';
+					document.getElementById('Confirm').innerHTML = 'Password matching';
+				} else {
+					document.getElementById('Confirm').style.color = 'red';
+					document.getElementById('Confirm').innerHTML = 'Password does not matching';
+				}
+			}
+
+			function checkfield()
+			{
+				console.log('hi');
+				var bt=document.getElementById('btn1');
+				var f1=document.getElementById('name').value;
+				var f2=document.getElementById('regno').value;
+				var f3=document.getElementById('mail').value;
+				var f4=document.getElementById('password').value;
+				var f5=document.getElementById('confirmpassword').value;
+					
+				if(f1 !='' && f2 !='' && f3 !='' && f4 !='' && f4==f5)
+				{
+					bt.classList.remove("disabled");
+					bt.disabled=false;
+				}
+			}
+
+			function signup(event)
+			{
+				
+				var f1=document.getElementById('name').value;
+				var f2=document.getElementById('regno').value;
+				var f3=document.getElementById('mail').value;
+				var f4=document.getElementById('password').value;
+				
+
+				event.preventDefault();
+				$.post("/submit/",{name:f1,regno:f2,email:f3,password:f4})
+				.done(function(response){
+					console.log(response);
+				})
+				.fail(function(err){
+					console.log(err);
+				})
+
+			}
+			</script>
+
+		
+		
+		<script src="js/main.js"></script>
+	</body>
+</html>
